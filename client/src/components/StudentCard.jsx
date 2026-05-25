@@ -5,7 +5,7 @@ const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 function StudentCard({ student, onDelete }) {
   const handleDelete = async () => {
     try {
-      await axios.delete(`/api/students/${student._id}`);
+      await axios.delete(`https://study-match-zeta.vercel.app/api/students/${student._id}`);
       onDelete(student._id);
     } catch (err) {
       console.error("Delete failed", err);

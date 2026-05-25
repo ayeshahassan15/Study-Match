@@ -34,7 +34,7 @@ function Home() {
     }
 
     try {
-      await axios.post("/api/students", form);
+     await axios.post("https://study-match-zeta.vercel.app/api/students", form);
       setStatus({ type: "success", msg: "You have been registered successfully!" });
       setForm({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
     } catch (err) {
