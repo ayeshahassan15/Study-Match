@@ -8,8 +8,12 @@ const studentRoutes = require("./routes/students");
 const app = express();
 
 app.use(cors({
-  origin: "https://study-match-4xx2.vercel.app"
+  origin: "https://study-match-4xx2.vercel.app",
+  methods: ["GET", "POST", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type"]
 }));
+
+app.options("*", cors());
 
 app.use(express.json());
 
@@ -29,3 +33,5 @@ mongoose
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch((err) => console.error("MongoDB connection error:", err));
+
+module.exports = app;
