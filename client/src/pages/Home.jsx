@@ -53,7 +53,7 @@ function Home() {
             <label>Your Name *</label>
             <input
               type="text"
-              placeholder="e.g. Ayesha Hassan"
+              placeholder="Name.."
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
