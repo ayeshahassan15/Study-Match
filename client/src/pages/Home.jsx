@@ -29,9 +29,14 @@ function Home() {
     setStatus(null);
 
     if (!form.name || form.subjects.length === 0 || form.days.length === 0 || !form.timeSlot) {
-      setStatus({ type: "error", msg: "Please fill in all required fields." });
-      return;
-    }
+  setStatus({ type: "error", msg: "Please fill in all required fields." });
+  return;
+}
+
+if (form.contact && !/^03[0-9]{9}$/.test(form.contact)) {
+  setStatus({ type: "error", msg: "Please enter a valid Pakistani number e.g. 03001234567" });
+  return;
+}
 
     try {
      await axios.post("https://study-match-zeta.vercel.app/api/students", form);
@@ -62,11 +67,11 @@ function Home() {
           <div className="form-group">
             <label>Contact (optional)</label>
             <input
-              type="text"
-              placeholder="e.g. email or WhatsApp number"
-              value={form.contact}
-              onChange={(e) => setForm({ ...form, contact: e.target.value })}
-            />
+            type="text"
+            placeholder="e.g. 03001234567"
+            value={form.contact}
+            onChange={(e) => setForm({ ...form, contact: e.target.value })}
+          />
           </div>
 
           <div className="form-group">
