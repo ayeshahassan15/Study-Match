@@ -7,7 +7,10 @@ const studentRoutes = require("./routes/students");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: "https://study-match-4xx2.vercel.app"
+}));
+
 app.use(express.json());
 
 app.use("/api/students", studentRoutes);
