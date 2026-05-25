@@ -1,37 +1,30 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 require("dotenv").config();
 
 const studentRoutes = require("./routes/students");
 
 const app = express();
 
-app.use(cors({
-  origin: "https://study-match-4xx2.vercel.app",
-  methods: ["GET", "POST", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type"]
-}));
-
-app.options("*", cors());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://study-match-4xx2.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type");
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+  next();
+});
 
 app.use(express.json());
-
 app.use("/api/students", studentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Study Match API is running");
 });
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
-
 mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("Connected to MongoDB");
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
+  .connect(process.env.MONGO_URI)
   .catch((err) => console.error("MongoDB connection error:", err));
 
 module.exports = app;
