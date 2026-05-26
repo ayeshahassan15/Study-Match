@@ -12,8 +12,8 @@ async function connectDB() {
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://study-match-4xx2.vercel.app");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  
   if (req.method === "OPTIONS") return res.status(200).end();
 
   await connectDB();
