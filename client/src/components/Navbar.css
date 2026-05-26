@@ -52,3 +52,28 @@
   background: rgba(124, 109, 255, 0.15);
   border-color: rgba(124, 109, 255, 0.3);
 }
+.nav-user {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.88rem;
+  padding: 0.4rem 0.5rem;
+}
+
+.logout-btn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.4rem 0.9rem;
+  font-size: 0.88rem;
+  font-family: 'Outfit', sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  color: white;
+  border-color: rgba(255, 107, 107, 0.4);
+  background: rgba(255, 107, 107, 0.08);
+  transform: none;
+  box-shadow: none;
+}
