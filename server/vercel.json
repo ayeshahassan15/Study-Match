@@ -4,9 +4,17 @@
     {
       "src": "api/students.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "api/auth.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
+    {
+      "src": "/api/auth/(.*)",
+      "dest": "api/auth.js"
+    },
     {
       "src": "/api/students(.*)",
       "dest": "api/students.js"

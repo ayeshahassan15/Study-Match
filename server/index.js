@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 
 const studentRoutes = require("./routes/students");
+const authRoutes = require("./routes/auth");
 
 const app = express();
 
@@ -18,6 +19,8 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use("/api/students", studentRoutes);
+app.use("/api/auth", authRoutes);
+
 
 app.get("/", (req, res) => {
   res.send("Study Match API is running");
