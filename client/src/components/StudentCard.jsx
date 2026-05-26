@@ -1,11 +1,14 @@
 import axios from "axios";
 
-const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const API = "https://study-match-zeta.vercel.app";
 
 function StudentCard({ student, onDelete }) {
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://study-match-zeta.vercel.app/api/students/${student._id}`);
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API}/api/students?id=${student._id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       onDelete(student._id);
     } catch (err) {
       console.error("Delete failed", err);
