@@ -13,9 +13,14 @@ function Students() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleDelete = (id) => {
+ const handleDelete = async (id) => {
+  try {
+    await axios.delete(`https://study-match-zeta.vercel.app/api/students?id=${id}`);
     setStudents((prev) => prev.filter((s) => s._id !== id));
-  };
+  } catch (err) {
+    console.error("Failed to delete student:", err);
+  }
+};
 
   return (
     <div>
