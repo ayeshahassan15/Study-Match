@@ -8,8 +8,7 @@ const {
   patchStudent,
   deleteStudent,
   matchStudents,
-} = require("../controllers/studentController");
-
+} = require("../controller/studentController");
 router.get("/match", matchStudents);
 router.get("/", getAllStudents);
 router.get("/:id", getStudentById);
