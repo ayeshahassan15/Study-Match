@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
-const Student = require("../models/Student");
+const {
+  getAllStudents,
+  getStudentById,
+  createStudent,
+  updateStudent,
+  patchStudent,
+  deleteStudent,
+  matchStudents,
+} = require("../controllers/studentController");
 
 let isConnected = false;
 
@@ -11,45 +19,33 @@ async function connectDB() {
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "https://study-match-4xx2.vercel.app");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  
+
   if (req.method === "OPTIONS") return res.status(200).end();
 
   await connectDB();
 
-  const { method, query } = req;
-  const id = query.id;
+  const url = req.url;
+  const id = req.query.id;
 
-  try {
-    if (method === "GET" && query.match) {
-      const { subject, day, timeSlot } = query;
-      const filter = {};
-      if (subject) filter.subjects = { $in: [new RegExp(subject, "i")] };
-      if (day) filter.days = { $in: [day] };
-      if (timeSlot) filter.timeSlot = timeSlot;
-      const matches = await Student.find(filter).sort({ createdAt: -1 });
-      return res.json(matches);
-    }
-
-    if (method === "GET") {
-      const students = await Student.find().sort({ createdAt: -1 });
-      return res.json(students);
-    }
-
-    if (method === "POST") {
-      const student = new Student(req.body);
-      const saved = await student.save();
-      return res.status(201).json(saved);
-    }
-
-    if (method === "DELETE" && id) {
-      await Student.findByIdAndDelete(id);
-      return res.json({ message: "Student removed" });
-    }
-
-    return res.status(404).json({ error: "Not found" });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
+  // Match route
+  if (req.method === "GET" && url.includes("match")) {
+    return matchStudents(req, res);
   }
+
+  // Routes with ID
+  if (id) {
+    req.params = { id };
+    if (req.method === "GET") return getStudentById(req, res);
+    if (req.method === "PUT") return updateStudent(req, res);
+    if (req.method === "PATCH") return patchStudent(req, res);
+    if (req.method === "DELETE") return deleteStudent(req, res);
+  }
+
+  // Routes without ID
+  if (req.method === "GET") return getAllStudents(req, res);
+  if (req.method === "POST") return createStudent(req, res);
+
+  return res.status(404).json({ message: "Route not found" });
 };
