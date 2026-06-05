@@ -13,11 +13,21 @@
   "routes": [
     {
       "src": "/api/auth/(.*)",
-      "dest": "/api/auth.js"
+      "dest": "/api/auth.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
     },
     {
       "src": "/api/students(.*)",
-      "dest": "/api/students.js"
+      "dest": "/api/students.js",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization"
+      }
     }
   ]
 }
