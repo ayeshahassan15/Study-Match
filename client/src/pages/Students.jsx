@@ -7,7 +7,7 @@ function Students() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("https://study-match-pi.vercel.app/api/students")
+    axios.get("/api/students")
       .then((res) => setStudents(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
@@ -15,7 +15,7 @@ function Students() {
 
  const handleDelete = async (id) => {
   try {
-    await axios.delete(`https://study-match-pi.vercel.app/api/students?id=${id}`);
+    await axios.delete(`/api/students?id=${id}`);
     setStudents((prev) => prev.filter((s) => s._id !== id));
   } catch (err) {
     console.error("Failed to delete student:", err);
