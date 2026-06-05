@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/:path*",
-      "destination": "/api/:path*"
+      "source": "https://study-match-pi.vercel.app/api/:path*",
+      "destination": "https://study-match-pi.vercel.app/api/:path*"
     },
     {
       "source": "/(.*)",

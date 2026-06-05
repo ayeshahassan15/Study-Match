@@ -20,7 +20,7 @@ function Match() {
       if (filters.day) params.day = filters.day;
       if (filters.timeSlot) params.timeSlot = filters.timeSlot;
 
-      const res = await axios.get("/api/students/match", { params });
+      const res = await axios.get("https://study-match-pi.vercel.app/api/students/match", { params });
       setResults(res.data);
       setSearched(true);
     } catch (err) {

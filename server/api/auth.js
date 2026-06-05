@@ -12,7 +12,7 @@ async function connectDB() {
 }
 
 module.exports = async (req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
+ res.setHeader("Access-Control-Allow-Origin", "https://study-match-r7c2.vercel.app");
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 

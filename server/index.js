@@ -18,8 +18,8 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use("/api/students", studentRoutes);
-app.use("/api/auth", authRoutes);
+app.use("https://study-match-pi.vercel.app/api/students", studentRoutes);
+app.use("https://study-match-pi.vercel.app/api/auth", authRoutes);
 
 
 app.get("/", (req, res) => {

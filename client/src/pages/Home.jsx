@@ -39,7 +39,7 @@ if (form.contact && !/^03[0-9]{9}$/.test(form.contact)) {
 }
 
     try {
-     await axios.post("/api/students", form);
+     await axios.post("https://study-match-pi.vercel.app/api/students", form);
       setStatus({ type: "success", msg: "You have been registered successfully!" });
       setForm({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
     } catch (err) {
