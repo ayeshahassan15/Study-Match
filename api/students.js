@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Student = require("../models/Student");
+const Student = require("../server/models/Student");
 
 let isConnected = false;
 
