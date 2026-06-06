@@ -26,6 +26,7 @@ function Navbar() {
             <NavLink to="/" end onClick={() => setMenuOpen(false)}>Register</NavLink>
             <NavLink to="/students" onClick={() => setMenuOpen(false)}>All Students</NavLink>
             <NavLink to="/match" onClick={() => setMenuOpen(false)}>Find Match</NavLink>
+            <NavLink to="/profile" onClick={() => setMenuOpen(false)}>My Profile</NavLink>
             <span className="nav-user">Hi, {user.name}</span>
             <button className="logout-btn" onClick={handleLogout}>Log out</button>
           </>

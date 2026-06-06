@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import EditStudent from "./pages/EditStudent";
 import StudentDetail from "./pages/StudentDetail";
+import Profile from "./pages/Profile";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -28,6 +29,7 @@ function AppRoutes() {
           <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
           <Route path="/edit/:id" element={<ProtectedRoute><EditStudent /></ProtectedRoute>} />
           <Route path="/student/:id" element={<ProtectedRoute><StudentDetail /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>
