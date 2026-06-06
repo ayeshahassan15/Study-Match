@@ -3,7 +3,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 
-const API = "";
+const API = "https://study-match-pi.vercel.app";
 
 function Login() {
   const { login } = useAuth();

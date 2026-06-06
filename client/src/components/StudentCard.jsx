@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "";
+const API = "https://study-match-pi.vercel.app";
 
 function StudentCard({ student, onDelete }) {
   const handleDelete = async () => {
