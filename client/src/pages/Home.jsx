@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
+import { useAuth } from "../context/AuthContext";
 
 const ALL_SUBJECTS = ["Mathematics", "Physics", "Programming", "Data Science", "AI/ML", "Database", "Web Development", "DSA", "English", "Calculus"];
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -8,6 +9,7 @@ const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
 
 function Home() {
   const { showToast } = useToast();
+  const { user } = useAuth();
   const [form, setForm] = useState({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -38,7 +40,8 @@ function Home() {
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setLoading(true);
     try {
-      await axios.post("/api/students", { ...form, name: form.name.trim() });
+      const token = localStorage.getItem("token");
+      await axios.post("/api/students", { ...form, name: form.name.trim() }, { headers: { Authorization: `Bearer ${token}` } });
       showToast("You have been registered successfully!");
       setForm({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
       setErrors({});
