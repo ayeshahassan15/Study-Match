@@ -7,7 +7,7 @@ function Students() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("https://study-match-pi.vercel.app/api/students")
+    axios.get("https://study-match-lemon.vercel.app/api/students")
       .then((res) => setStudents(res.data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
