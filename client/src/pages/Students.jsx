@@ -28,7 +28,7 @@ function Students() {
       await axios.delete(`/api/students?id=${id}`);
       dispatch({ type: "DELETE", id });
     } catch (err) {
-      console.error("Failed to delete:", err);
+
     }
   };
 
