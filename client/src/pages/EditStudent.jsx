@@ -1,17 +1,17 @@
 import { useEffect, useReducer, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useToast } from "../context/ToastContext";
 
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const initialState = { form: null, loading: true, saving: false, errors: {}, status: null };
+const initialState = { form: null, loading: true, saving: false, errors: {} };
 
 function reducer(state, action) {
   switch (action.type) {
     case "LOADED": return { ...state, loading: false, form: action.payload };
     case "SET_FIELD": return { ...state, form: { ...state.form, [action.field]: action.value }, errors: { ...state.errors, [action.field]: null } };
-    case "SAVING": return { ...state, saving: true, errors: {}, status: null };
-    case "SAVED": return { ...state, saving: false, status: { type: "success", msg: "Updated successfully!" } };
-    case "ERROR": return { ...state, saving: false, status: { type: "error", msg: action.payload } };
+    case "SAVING": return { ...state, saving: true, errors: {} };
+    case "SAVED": return { ...state, saving: false };
     case "SET_ERRORS": return { ...state, errors: action.payload };
     default: return state;
   }
@@ -21,12 +21,13 @@ function EditStudent() {
   const { id } = useParams();
   const navigate = useNavigate();
   const nameRef = useRef();
+  const { showToast } = useToast();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
     axios.get(`/api/students?id=${id}`)
       .then(res => { dispatch({ type: "LOADED", payload: res.data.data }); setTimeout(() => nameRef.current?.focus(), 100); })
-      .catch(() => dispatch({ type: "ERROR", payload: "Failed to load student" }));
+      .catch(() => { showToast("Failed to load student.", "error"); navigate("/students"); });
   }, [id]);
 
   const validate = () => {
@@ -57,9 +58,10 @@ function EditStudent() {
     try {
       await axios.put(`/api/students?id=${id}`, state.form);
       dispatch({ type: "SAVED" });
-      setTimeout(() => navigate("/students"), 1000);
+      showToast("Student updated successfully!");
+      setTimeout(() => navigate("/students"), 800);
     } catch (err) {
-      dispatch({ type: "ERROR", payload: err.response?.data?.message || "Update failed" });
+      showToast(err.response?.data?.message || "Update failed.", "error");
     }
   };
 
@@ -88,10 +90,7 @@ function EditStudent() {
             <label>Available Days *</label>
             <div className="checkbox-group">
               {DAYS.map(day => (
-                <label key={day}>
-                  <input type="checkbox" checked={f.days.includes(day)} onChange={() => toggleDay(day)} />
-                  {day}
-                </label>
+                <label key={day}><input type="checkbox" checked={f.days.includes(day)} onChange={() => toggleDay(day)} />{day}</label>
               ))}
             </div>
             {state.errors.days && <p className="error" style={{ marginTop: "0.3rem" }}>{state.errors.days}</p>}
@@ -110,7 +109,6 @@ function EditStudent() {
             <label>Contact</label>
             <input type="text" value={f.contact || ""} onChange={e => dispatch({ type: "SET_FIELD", field: "contact", value: e.target.value })} />
           </div>
-          {state.status && <p className={state.status.type} style={{ marginTop: "0.5rem" }}>{state.status.msg}</p>}
           <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
             <button type="submit" disabled={state.saving}>{state.saving ? "Saving..." : "Save Changes"}</button>
             <button type="button" onClick={() => navigate("/students")} style={{ background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>Cancel</button>

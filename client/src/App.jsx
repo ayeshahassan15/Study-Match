@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Students from "./pages/Students";
@@ -25,7 +26,6 @@ function AppRoutes() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
-          <Route path="/match" element={<ProtectedRoute><Match /></ProtectedRoute>} />
           <Route path="/edit/:id" element={<ProtectedRoute><EditStudent /></ProtectedRoute>} />
           <Route path="/student/:id" element={<ProtectedRoute><StudentDetail /></ProtectedRoute>} />
         </Routes>
@@ -37,7 +37,9 @@ function AppRoutes() {
 function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <ToastProvider>
+        <AppRoutes />
+      </ToastProvider>
     </AuthProvider>
   );
 }
