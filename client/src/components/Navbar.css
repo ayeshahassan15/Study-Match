@@ -12,10 +12,11 @@
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: wrap;
 }
 
 .brand {
-  font-family: 'Space Mono', monospace;
+  font-family: "Space Mono", monospace;
   color: white;
   font-size: 1.1rem;
   font-weight: 700;
@@ -26,9 +27,28 @@
   background-clip: text;
 }
 
+.hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  font-size: 1.2rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.hamburger:hover {
+  background: rgba(255,255,255,0.05);
+  transform: none;
+  box-shadow: none;
+}
+
 .nav-links {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .nav-links a {
@@ -52,6 +72,7 @@
   background: rgba(124, 109, 255, 0.15);
   border-color: rgba(124, 109, 255, 0.3);
 }
+
 .nav-user {
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.88rem;
@@ -64,7 +85,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.4rem 0.9rem;
   font-size: 0.88rem;
-  font-family: 'Outfit', sans-serif;
+  font-family: "Outfit", sans-serif;
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s;
@@ -76,4 +97,36 @@
   background: rgba(255, 107, 107, 0.08);
   transform: none;
   box-shadow: none;
+}
+
+@media (max-width: 640px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.8rem 0;
+    gap: 0.3rem;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    width: 100%;
+  }
+
+  .logout-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  .nav-user {
+    padding: 0.4rem 0.9rem;
+  }
 }
