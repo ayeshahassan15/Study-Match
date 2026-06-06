@@ -3,15 +3,16 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-const initialState = { form: null, loading: true, saving: false, error: null, success: null };
+const initialState = { form: null, loading: true, saving: false, errors: {}, status: null };
 
 function reducer(state, action) {
   switch (action.type) {
     case "LOADED": return { ...state, loading: false, form: action.payload };
-    case "SET_FIELD": return { ...state, form: { ...state.form, [action.field]: action.value } };
-    case "SAVING": return { ...state, saving: true, error: null, success: null };
-    case "SAVED": return { ...state, saving: false, success: "Updated successfully!" };
-    case "ERROR": return { ...state, saving: false, error: action.payload };
+    case "SET_FIELD": return { ...state, form: { ...state.form, [action.field]: action.value }, errors: { ...state.errors, [action.field]: null } };
+    case "SAVING": return { ...state, saving: true, errors: {}, status: null };
+    case "SAVED": return { ...state, saving: false, status: { type: "success", msg: "Updated successfully!" } };
+    case "ERROR": return { ...state, saving: false, status: { type: "error", msg: action.payload } };
+    case "SET_ERRORS": return { ...state, errors: action.payload };
     default: return state;
   }
 }
@@ -28,6 +29,18 @@ function EditStudent() {
       .catch(() => dispatch({ type: "ERROR", payload: "Failed to load student" }));
   }, [id]);
 
+  const validate = () => {
+    const errs = {};
+    const f = state.form;
+    if (!f.name.trim()) errs.name = "Name is required";
+    else if (f.name.trim().length < 3) errs.name = "Name must be at least 3 characters";
+    else if (!/^[a-zA-Z\s]+$/.test(f.name)) errs.name = "Name can only contain letters and spaces";
+    if (!f.subjects || f.subjects.length === 0) errs.subjects = "Select at least one subject";
+    if (!f.days || f.days.length === 0) errs.days = "Select at least one day";
+    if (!f.timeSlot) errs.timeSlot = "Time slot is required";
+    return errs;
+  };
+
   const toggleDay = (day) => {
     const days = state.form.days.includes(day)
       ? state.form.days.filter(d => d !== day)
@@ -37,6 +50,9 @@ function EditStudent() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { dispatch({ type: "SET_ERRORS", payload: errs }); return; }
+    if (!window.confirm("Are you sure you want to save these changes?")) return;
     dispatch({ type: "SAVING" });
     try {
       await axios.put(`/api/students?id=${id}`, state.form);
@@ -59,15 +75,17 @@ function EditStudent() {
       <div className="card">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Name</label>
+            <label>Name *</label>
             <input ref={nameRef} type="text" value={f.name} onChange={e => dispatch({ type: "SET_FIELD", field: "name", value: e.target.value })} />
+            {state.errors.name && <p className="error" style={{ marginTop: "0.3rem" }}>{state.errors.name}</p>}
           </div>
           <div className="form-group">
-            <label>Subjects (comma separated)</label>
+            <label>Subjects (comma separated) *</label>
             <input type="text" value={f.subjects.join(", ")} onChange={e => dispatch({ type: "SET_FIELD", field: "subjects", value: e.target.value.split(",").map(s => s.trim()).filter(Boolean) })} />
+            {state.errors.subjects && <p className="error" style={{ marginTop: "0.3rem" }}>{state.errors.subjects}</p>}
           </div>
           <div className="form-group">
-            <label>Available Days</label>
+            <label>Available Days *</label>
             <div className="checkbox-group">
               {DAYS.map(day => (
                 <label key={day}>
@@ -76,22 +94,27 @@ function EditStudent() {
                 </label>
               ))}
             </div>
+            {state.errors.days && <p className="error" style={{ marginTop: "0.3rem" }}>{state.errors.days}</p>}
           </div>
           <div className="form-group">
-            <label>Time Slot</label>
+            <label>Time Slot *</label>
             <select value={f.timeSlot} onChange={e => dispatch({ type: "SET_FIELD", field: "timeSlot", value: e.target.value })}>
+              <option value="">Select time slot</option>
               <option>Morning</option>
               <option>Afternoon</option>
               <option>Evening</option>
             </select>
+            {state.errors.timeSlot && <p className="error" style={{ marginTop: "0.3rem" }}>{state.errors.timeSlot}</p>}
           </div>
           <div className="form-group">
             <label>Contact</label>
             <input type="text" value={f.contact || ""} onChange={e => dispatch({ type: "SET_FIELD", field: "contact", value: e.target.value })} />
           </div>
-          {state.error && <p className="error">{state.error}</p>}
-          {state.success && <p className="success">{state.success}</p>}
-          <button type="submit" disabled={state.saving}>{state.saving ? "Saving..." : "Save Changes"}</button>
+          {state.status && <p className={state.status.type} style={{ marginTop: "0.5rem" }}>{state.status.msg}</p>}
+          <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
+            <button type="submit" disabled={state.saving}>{state.saving ? "Saving..." : "Save Changes"}</button>
+            <button type="button" onClick={() => navigate("/students")} style={{ background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>Cancel</button>
+          </div>
         </form>
       </div>
     </div>
