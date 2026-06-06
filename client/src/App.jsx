@@ -6,6 +6,8 @@ import Students from "./pages/Students";
 import Match from "./pages/Match";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import EditStudent from "./pages/EditStudent";
+import StudentDetail from "./pages/StudentDetail";
 import "./App.css";
 
 function ProtectedRoute({ children }) {
@@ -24,6 +26,8 @@ function AppRoutes() {
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
           <Route path="/match" element={<ProtectedRoute><Match /></ProtectedRoute>} />
+          <Route path="/edit/:id" element={<ProtectedRoute><EditStudent /></ProtectedRoute>} />
+          <Route path="/student/:id" element={<ProtectedRoute><StudentDetail /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>

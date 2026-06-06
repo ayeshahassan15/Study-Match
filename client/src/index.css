@@ -295,3 +295,11 @@ button:active {
 .card:nth-child(3) { animation-delay: 0.15s; }
 .card:nth-child(4) { animation-delay: 0.2s; }
 .card:nth-child(5) { animation-delay: 0.25s; }
+/* Responsive */
+@media (max-width: 600px) {
+  .container { padding: 1.2rem 1rem; }
+  h1 { font-size: 1.4rem; }
+  .card { padding: 1.1rem; }
+  button { width: 100%; margin-bottom: 0.4rem; }
+  .delete-btn { width: auto; }
+}
