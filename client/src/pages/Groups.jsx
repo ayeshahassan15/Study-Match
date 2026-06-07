@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+﻿import { useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import usePageTitle from "../hooks/usePageTitle";
@@ -104,7 +104,7 @@ function Groups() {
 
       {!state.loading && state.groups.length === 0 && (
         <div style={{ textAlign: "center", padding: "3rem 0" }}>
-          <p style={{ fontSize: "3rem" }}>👥</p>
+          <p style={{ fontSize: "3rem" }}>ðŸ‘¥</p>
           <p className="empty">No study groups yet. Create the first one!</p>
         </div>
       )}
@@ -119,7 +119,7 @@ function Groups() {
                 <h3 style={{ marginBottom: "0.3rem" }}>{group.name}</h3>
                 <span className="tag" style={{ marginBottom: "0.5rem", display: "inline-block" }}>{group.subject}</span>
                 <p style={{ fontSize: "0.85rem", marginTop: "0.5rem" }}>
-                  👥 {group.members.length} member{group.members.length !== 1 ? "s" : ""}: {group.memberNames.join(", ")}
+                  ðŸ‘¥ {group.members.length} member{group.members.length !== 1 ? "s" : ""}: {group.memberNames.join(", ")}
                 </p>
                 {isCreator && <span className="tag time" style={{ marginTop: "0.3rem", display: "inline-block" }}>Creator</span>}
               </div>
