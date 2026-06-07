@@ -70,7 +70,7 @@ function Students() {
       <p style={{ marginBottom: "1rem" }}>{filtered.length} student{filtered.length !== 1 ? "s" : ""} found</p>
 
       <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>
-        <input style={{ flex: 1, minWidth: "200px", padding: "0.7rem 1rem", background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text)", fontFamily: "Outfit, sans-serif", fontSize: "0.95rem" }} type="text" placeholder="?? Search by name or subject..." value={search} onChange={handleSearch} />
+        <input style={{ flex: 1, minWidth: "200px", padding: "0.7rem 1rem", background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text)", fontFamily: "Outfit, sans-serif", fontSize: "0.95rem" }} type="text" placeholder="Search by name or subject..." value={search} onChange={handleSearch} />
         <select value={sort} onChange={e => { setSort(e.target.value); setPage(1); }} style={{ padding: "0.7rem 1rem", background: "var(--surface2)", border: "1px solid var(--border)", borderRadius: "10px", color: "var(--text)", fontFamily: "Outfit, sans-serif" }}>
           <option value="newest">Newest First</option>
           <option value="oldest">Oldest First</option>
@@ -105,9 +105,3 @@ function Students() {
   );
 }
 export default Students;
-
-
-
-
-
-

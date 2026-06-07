@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+﻿import { useState, useEffect, useRef  } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useTheme } from "../context/ThemeContext";
@@ -12,15 +12,32 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [unread, setUnread] = useState(0);
 
-  useEffect(() => {
+const navRef = useRef(null);
+
+useEffect(() => {
+  const handleClickOutside = (e) => {
+    if (navRef.current && !navRef.current.contains(e.target)) {
+      setMenuOpen(false);
+    }
+  };
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
+
+ useEffect(() => {
     if (!user) return;
-    const token = localStorage.getItem("token");
-    axios.get("/api/connections", { headers: { Authorization: `Bearer ${token}` } })
-      .then(res => {
-        const notifs = res.data.data.notifications || [];
-        setUnread(notifs.filter(n => !n.read).length + (res.data.data.requests?.length || 0));
-      })
-      .catch(() => {});
+    const fetchUnread = () => {
+      const token = localStorage.getItem("token");
+      axios.get("/api/connections", { headers: { Authorization: `Bearer ${token}` } })
+        .then(res => {
+          const notifs = res.data.data.notifications || [];
+          setUnread(notifs.filter(n => !n.read).length + (res.data.data.requests?.length || 0));
+        })
+        .catch(() => {});
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
   }, [user]);
 
   const handleLogout = () => {
@@ -30,15 +47,16 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar">
-      <span className="brand">Study Match</span>
+    
+<nav className="navbar" ref={navRef}>
+      <NavLink to="/" className="brand">Study Match</NavLink>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <button onClick={toggleTheme} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "0.3rem 0.6rem", fontSize: "1rem", borderRadius: "8px" }}>
-          {theme === "dark" ? "??" : "??"}
-        </button>
+  {theme === "dark" ? "🌙" : "☀️"}
+</button>
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? "?" : "?"}
-        </button>
+  {menuOpen ? "✕" : "☰"}
+</button>
       </div>
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
         {user ? (
