@@ -41,7 +41,7 @@ function Match() {
       const myId = getMyId();
       const res = await axios.get("/api/students");
       let data = res.data.data;
-      data = data.filter(s => s.userId !== myId);
+      data = data.filter(s => !s.userId || s.userId !== myId);
       if (filters.subject.trim()) data = data.filter(s => s.subjects.some(sub => sub.toLowerCase().includes(filters.subject.toLowerCase())));
       if (filters.day) data = data.filter(s => s.days.includes(filters.day));
       if (filters.timeSlot) data = data.filter(s => s.timeSlot === filters.timeSlot);
@@ -121,6 +121,7 @@ function Match() {
   );
 }
 export default Match;
+
 
 
 
