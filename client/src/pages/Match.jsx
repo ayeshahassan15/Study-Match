@@ -1,13 +1,10 @@
 import usePageTitle from "../hooks/usePageTitle";
 import PageWrapper from "../components/PageWrapper";
 import { useState } from "react";
-import PageWrapper from "../components/PageWrapper";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import PageWrapper from "../components/PageWrapper";
 import StudentCard from "../components/StudentCard";
 import Spinner from "../components/Spinner";
-import PageWrapper from "../components/PageWrapper";
 
 const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const TIME_SLOTS = ["Morning","Afternoon","Evening"];
@@ -121,6 +118,7 @@ function Match() {
   );
 }
 export default Match;
+
 
 
 

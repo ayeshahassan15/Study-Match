@@ -1,7 +1,6 @@
 import usePageTitle from "../hooks/usePageTitle";
 import PageWrapper from "../components/PageWrapper";
 import { Link } from "react-router-dom";
-import PageWrapper from "../components/PageWrapper";
 
 function NotFound() {
   usePageTitle("404 Not Found");
@@ -17,6 +16,7 @@ function NotFound() {
   );
 }
 export default NotFound;
+
 
 
 
