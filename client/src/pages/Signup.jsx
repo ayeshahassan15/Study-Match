@@ -1,9 +1,14 @@
+import usePageTitle from "../hooks/usePageTitle";
+import PageWrapper from "../components/PageWrapper";
 import { useState } from "react";
+import PageWrapper from "../components/PageWrapper";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import PageWrapper from "../components/PageWrapper";
 import { useNavigate, Link } from "react-router-dom";
 
 function Signup() {
+  usePageTitle("Sign Up");
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", password: "", confirmPassword: "" });
@@ -45,7 +50,7 @@ function Signup() {
     setLoading(true);
     try {
       const res = await axios.post("/api/auth/register", { name: form.name.trim(), email: form.email.trim(), password: form.password });
-      login(res.data.token, res.data.name);
+      login(res.data.token, res.data.name, res.data.badges || []);
       navigate("/");
     } catch (err) {
       setStatus(err.response?.data?.message || "Something went wrong");
@@ -65,7 +70,8 @@ function Signup() {
   const strength = getPasswordStrength();
 
   return (
-    <div>
+    <PageWrapper>
+      <div>
       <h1>Create an account</h1>
       <p style={{ marginBottom: "1.5rem" }}>Join and find students to study with</p>
       <div className="card">
@@ -110,7 +116,12 @@ function Signup() {
         </form>
       </div>
     </div>
+    </PageWrapper>
   );
 }
-
 export default Signup;
+
+
+
+
+

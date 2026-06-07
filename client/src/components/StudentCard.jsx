@@ -1,17 +1,29 @@
 import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
 
 function StudentCard({ student, onDelete, onView, onEdit }) {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const token = user ? localStorage.getItem("token") : null;
   const payload = token ? JSON.parse(atob(token.split(".")[1])) : null;
   const isOwner = payload && student.userId && student.userId === payload.id;
+
+  const handleCopyContact = () => {
+    navigator.clipboard.writeText(student.contact);
+    showToast("Contact copied to clipboard!");
+  };
 
   return (
     <div className="card">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
         <div style={{ flex: 1 }}>
           <h3 style={{ marginBottom: "0.4rem" }}>{student.name}</h3>
-          {student.contact && <p style={{ fontSize: "0.85rem", marginBottom: "0.6rem" }}>{student.contact}</p>}
+          {student.contact && (
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.6rem" }}>
+              <p style={{ fontSize: "0.85rem" }}>{student.contact}</p>
+              <button onClick={handleCopyContact} style={{ fontSize: "0.7rem", padding: "0.2rem 0.5rem", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text-muted)" }}>Copy</button>
+            </div>
+          )}
           <div style={{ marginBottom: "0.5rem" }}>
             {student.subjects.map(s => <span key={s} className="tag">{s}</span>)}
           </div>

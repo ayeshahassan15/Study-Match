@@ -1,4 +1,7 @@
 import { useState } from "react";
+import PageWrapper from "../components/PageWrapper";
+import usePageTitle from "../hooks/usePageTitle";
+import PageWrapper from "../components/PageWrapper";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { useAuth } from "../context/AuthContext";
@@ -8,6 +11,7 @@ const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
 
 function Home() {
+  usePageTitle("Register");
   const { showToast } = useToast();
   const { user } = useAuth();
   const [form, setForm] = useState({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
@@ -53,6 +57,7 @@ function Home() {
   };
 
   return (
+    <PageWrapper>
     <div>
       <h1>Register as a Study Buddy</h1>
       <p style={{ marginBottom: "1.5rem" }}>Add your details and find students who study the same subjects at the same time.</p>
@@ -98,7 +103,12 @@ function Home() {
         </form>
       </div>
     </div>
+    </PageWrapper>
   );
 }
 
 export default Home;
+
+
+
+

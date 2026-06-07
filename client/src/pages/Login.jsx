@@ -1,9 +1,14 @@
+import usePageTitle from "../hooks/usePageTitle";
+import PageWrapper from "../components/PageWrapper";
 import { useState } from "react";
+import PageWrapper from "../components/PageWrapper";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import PageWrapper from "../components/PageWrapper";
 import { useNavigate, Link } from "react-router-dom";
 
 function Login() {
+  usePageTitle("Login");
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -34,7 +39,7 @@ function Login() {
     setLoading(true);
     try {
       const res = await axios.post("/api/auth/login", { email: form.email.trim(), password: form.password });
-      login(res.data.token, res.data.name);
+      login(res.data.token, res.data.name, res.data.badges || []);
       navigate("/");
     } catch (err) {
       setStatus(err.response?.data?.message || "Something went wrong");
@@ -44,7 +49,8 @@ function Login() {
   };
 
   return (
-    <div>
+    <PageWrapper>
+      <div>
       <h1>Welcome back</h1>
       <p style={{ marginBottom: "1.5rem" }}>Log in to find your study buddy</p>
       <div className="card">
@@ -73,7 +79,13 @@ function Login() {
         </form>
       </div>
     </div>
+    </PageWrapper>
   );
 }
-
 export default Login;
+
+
+
+
+
+

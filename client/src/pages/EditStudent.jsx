@@ -1,3 +1,6 @@
+import useKeyboard from "../hooks/useKeyboard";
+import usePageTitle from "../hooks/usePageTitle";
+import PageWrapper from "../components/PageWrapper";
 import { useEffect, useReducer, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -18,6 +21,8 @@ function reducer(state, action) {
 }
 
 function EditStudent() {
+  usePageTitle("Edit Student");
+  useKeyboard([{ key: "Escape", action: () => navigate("/students") }]);
   const { id } = useParams();
   const navigate = useNavigate();
   const nameRef = useRef();
@@ -71,6 +76,7 @@ function EditStudent() {
   const f = state.form;
 
   return (
+    <PageWrapper>
     <div>
       <h1>Edit Student</h1>
       <p style={{ marginBottom: "1.5rem" }}>Update student information</p>
@@ -116,7 +122,12 @@ function EditStudent() {
         </form>
       </div>
     </div>
+     </PageWrapper>
   );
 }
 
 export default EditStudent;
+
+
+
+
