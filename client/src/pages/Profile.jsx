@@ -94,7 +94,7 @@ function Profile() {
         </div>
       )}
 
-      <h2 style={{ marginBottom: "1rem" }}>My Registered Students ({state.loading ? "..." : state.students.length})</h2>
+      <h2 style={{ marginBottom: "1rem" }}>My Study Profiles ({state.loading ? "..." : state.students.length})</h2>
 
       {state.loading && <Spinner />}
 
@@ -114,6 +114,7 @@ function Profile() {
 }
 
 export default Profile;
+
 
 
 

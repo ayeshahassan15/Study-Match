@@ -49,7 +49,7 @@ function Signup() {
     try {
       const res = await axios.post("/api/auth/register", { name: form.name.trim(), email: form.email.trim(), password: form.password });
       login(res.data.token, res.data.name, res.data.badges || []);
-      navigate("/students");
+      navigate("/register");
     } catch (err) {
       setStatus(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -118,6 +118,7 @@ function Signup() {
   );
 }
 export default Signup;
+
 
 
 
