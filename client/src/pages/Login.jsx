@@ -1,4 +1,4 @@
-import usePageTitle from "../hooks/usePageTitle";
+﻿import usePageTitle from "../hooks/usePageTitle";
 import PageWrapper from "../components/PageWrapper";
 import { useState } from "react";
 import axios from "axios";
@@ -38,7 +38,7 @@ function Login() {
     try {
       const res = await axios.post("/api/auth/login", { email: form.email.trim(), password: form.password });
       login(res.data.token, res.data.name, res.data.badges || []);
-      navigate("/");
+      navigate("/students");
     } catch (err) {
       setStatus(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -71,9 +71,12 @@ function Login() {
           {status && <p className="error">{status}</p>}
           <button type="submit" disabled={loading} style={{ width: "100%", marginTop: "0.5rem" }}>{loading ? "Logging in..." : "Log In"}</button>
           <p style={{ marginTop: "1rem", fontSize: "0.88rem" }}>
-            Don't have an account?{" "}
-            <Link to="/signup" style={{ color: "var(--accent)" }}>Sign up</Link>
-          </p>
+  Don't have an account?{" "}
+  <Link to="/signup" style={{ color: "var(--accent)" }}>Sign up</Link>
+</p>
+<p style={{ marginTop: "0.5rem", fontSize: "0.88rem" }}>
+  <span style={{ color: "var(--accent)", cursor: "pointer" }} onClick={() => alert("Please contact support to reset your password.")}>Forgot password?</span>
+</p>
         </form>
       </div>
     </div>
@@ -81,6 +84,9 @@ function Login() {
   );
 }
 export default Login;
+
+
+
 
 
 

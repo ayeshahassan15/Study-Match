@@ -1,4 +1,4 @@
-import usePageTitle from "../hooks/usePageTitle";
+﻿import usePageTitle from "../hooks/usePageTitle";
 import PageWrapper from "../components/PageWrapper";
 import { useState } from "react";
 import axios from "axios";
@@ -49,7 +49,7 @@ function Signup() {
     try {
       const res = await axios.post("/api/auth/register", { name: form.name.trim(), email: form.email.trim(), password: form.password });
       login(res.data.token, res.data.name, res.data.badges || []);
-      navigate("/");
+      navigate("/students");
     } catch (err) {
       setStatus(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -118,6 +118,7 @@ function Signup() {
   );
 }
 export default Signup;
+
 
 
 

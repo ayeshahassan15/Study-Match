@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+﻿const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../server/models/User");
@@ -55,8 +55,32 @@ module.exports = async (req, res) => {
       return res.status(200).json({ message: "User fetched successfully", data: user });
     }
 
+        if (req.method === "PATCH" && url.includes("update")) {
+      const auth = req.headers.authorization;
+      if (!auth) return res.status(401).json({ message: "Unauthorized" });
+      const token = auth.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const { name, currentPassword, newPassword } = req.body;
+      const user = await User.findById(decoded.id);
+      if (!user) return res.status(404).json({ message: "User not found" });
+      if (name) user.name = name.trim();
+      if (newPassword) {
+        const match = await bcrypt.compare(currentPassword, user.password);
+        if (!match) return res.status(400).json({ message: "Current password is incorrect." });
+        user.password = await bcrypt.hash(newPassword, 10);
+      }
+      await user.save();
+      const newToken = jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET, { expiresIn: "7d" });
+      return res.status(200).json({ message: "Account updated successfully", token: newToken, name: user.name });
+    }
+
     return res.status(404).json({ message: "Route not found" });
   } catch (err) {
     return res.status(500).json({ message: "Something went wrong. Please try again later.", error: err.message });
   }
 };
+
+
+
+
+

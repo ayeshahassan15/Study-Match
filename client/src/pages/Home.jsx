@@ -1,11 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import PageWrapper from "../components/PageWrapper";
 import usePageTitle from "../hooks/usePageTitle";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { useAuth } from "../context/AuthContext";
 
-const ALL_SUBJECTS = ["Mathematics", "Physics", "Programming", "Data Science", "AI/ML", "Database", "Web Development", "DSA", "English", "Calculus"];
+const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
 
@@ -107,6 +107,7 @@ function Home() {
 }
 
 export default Home;
+
 
 
 

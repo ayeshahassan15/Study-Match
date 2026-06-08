@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+﻿import { useEffect, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
@@ -69,16 +69,19 @@ function Profile() {
       <p style={{ marginBottom: "1.5rem" }}>Manage your account and registered students</p>
 
       <div className="card" style={{ marginBottom: "1.5rem" }}>
-        <h2 style={{ marginBottom: "1rem" }}>Account Info</h2>
-        {state.loading ? <Spinner /> : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            <p>Name: <strong style={{ color: "var(--text)" }}>{user?.name}</strong></p>
-            <p>Email: <strong style={{ color: "var(--text)" }}>{state.userInfo?.email}</strong></p>
-            <p>Students Registered: <strong style={{ color: "var(--accent)" }}>{state.students.length}</strong></p>
-            {avgRating && <p>Average Rating: <strong style={{ color: "var(--success)" }}>? {avgRating} / 5 ({state.userInfo.ratings.count} ratings)</strong></p>}
-          </div>
-        )}
-      </div>
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
+    <h2>Account Info</h2>
+    <button onClick={() => navigate("/edit-account")} style={{ fontSize: "0.8rem", padding: "0.3rem 0.8rem", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>Edit Account</button>
+  </div>
+  {state.loading ? <Spinner /> : (
+    <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+      <p>Name: <strong style={{ color: "var(--text)" }}>{user?.name}</strong></p>
+      <p>Email: <strong style={{ color: "var(--text)" }}>{state.userInfo?.email}</strong></p>
+      <p>My Study Profiles: <strong style={{ color: "var(--accent)" }}>{state.students.length}</strong></p>
+      {avgRating && <p>Average Rating: <strong style={{ color: "var(--success)" }}>Rating: {avgRating} / 5 ({state.userInfo.ratings.count} ratings)</strong></p>}
+    </div>
+  )}
+</div>
 
       {state.userInfo?.badges?.length > 0 && (
         <div className="card" style={{ marginBottom: "1.5rem" }}>
@@ -111,3 +114,7 @@ function Profile() {
 }
 
 export default Profile;
+
+
+
+

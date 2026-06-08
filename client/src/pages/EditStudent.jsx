@@ -1,4 +1,4 @@
-import useKeyboard from "../hooks/useKeyboard";
+﻿import useKeyboard from "../hooks/useKeyboard";
 import usePageTitle from "../hooks/usePageTitle";
 import PageWrapper from "../components/PageWrapper";
 import { useEffect, useReducer, useRef } from "react";
@@ -6,6 +6,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
 
+const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const initialState = { form: null, loading: true, saving: false, errors: {} };
 
@@ -48,7 +49,8 @@ function EditStudent() {
   };
 
   const toggleDay = (day) => {
-    const days = state.form.days.includes(day)
+    const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
+const DAYS = state.form.days.includes(day)
       ? state.form.days.filter(d => d !== day)
       : [...state.form.days, day];
     dispatch({ type: "SET_FIELD", field: "days", value: days });
@@ -127,6 +129,7 @@ function EditStudent() {
 }
 
 export default EditStudent;
+
 
 
 

@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+﻿import { useEffect, useReducer, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import Spinner from "../components/Spinner";
@@ -76,7 +76,6 @@ function StudentDetail() {
   if (state.loading) return <Spinner />;
   if (state.error) return (
     <div style={{ textAlign: "center", padding: "3rem 0" }}>
-      <p style={{ fontSize: "3rem" }}>??</p>
       <p className="error">{state.error}</p>
       <button onClick={() => navigate("/students")} style={{ marginTop: "1rem" }}>Back to Students</button>
     </div>
@@ -99,7 +98,7 @@ function StudentDetail() {
 
       {state.rating && (
         <p style={{ marginBottom: "1.5rem", color: "var(--text-muted)" }}>
-          ? {state.rating} / 5 ({state.ratingCount} rating{state.ratingCount !== 1 ? "s" : ""})
+          Rating: {state.rating} / 5 ({state.ratingCount} rating{state.ratingCount !== 1 ? "s" : ""})
         </p>
       )}
 
@@ -116,35 +115,30 @@ function StudentDetail() {
         <div style={{ marginBottom: "1rem" }}>
           <span className="tag time">{s.timeSlot}</span>
         </div>
-        {s.contact && (
-          <>
-            <h2>Contact</h2>
-            <p style={{ marginBottom: "1rem" }}>{s.contact}</p>
-          </>
-        )}
 
         {!isOwner && (
           <div style={{ marginBottom: "1rem" }}>
             <h2 style={{ marginBottom: "0.5rem" }}>Rate this student</h2>
-            <div style={{ display: "flex", gap: "0.3rem" }}>
+            <div style={{ display: "flex", gap: "0.5rem" }}>
               {[1,2,3,4,5].map(star => (
-                <button key={star} onClick={() => !rated && handleRate(star)}
+                <button key={star}
+                  onClick={() => !rated && handleRate(star)}
                   onMouseEnter={() => !rated && setHoveredRating(star)}
                   onMouseLeave={() => !rated && setHoveredRating(0)}
-                  style={{ background: "none", border: "none", fontSize: "1.5rem", cursor: rated ? "default" : "pointer", padding: "0", filter: star <= (hoveredRating || selectedRating) ? "none" : "grayscale(1)" }}>
-                  ?
+                  style={{ background: star <= (hoveredRating || selectedRating) ? "var(--accent)" : "var(--surface2)", border: "1px solid var(--border)", color: "white", width: "36px", height: "36px", borderRadius: "8px", cursor: rated ? "default" : "pointer", fontWeight: "bold" }}>
+                  {star}
                 </button>
               ))}
             </div>
-            {rated && <p className="success" style={{ marginTop: "0.3rem" }}>Thanks for rating!</p>}
+            {rated && <p className="success" style={{ marginTop: "0.5rem" }}>Thanks for rating!</p>}
           </div>
         )}
 
         <div style={{ display: "flex", gap: "1rem", marginTop: "1rem", flexWrap: "wrap" }}>
           {isOwner && <Link to={`/edit/${s._id}`}><button>Edit</button></Link>}
           {!isOwner && (
-            <button onClick={handleConnect} disabled={requesting}>
-              {requesting ? "Sending..." : "?? Connect"}
+            <button onClick={handleConnect} disabled={requesting} style={{ background: "var(--accent)" }}>
+              {requesting ? "Sending..." : "Connect"}
             </button>
           )}
           <button onClick={() => navigate("/students")} style={{ background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>Back</button>
@@ -155,3 +149,4 @@ function StudentDetail() {
 }
 
 export default StudentDetail;
+
