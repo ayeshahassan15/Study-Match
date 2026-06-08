@@ -73,6 +73,8 @@ module.exports = async (req, res) => {
       const me = await User.findById(user.id)
         .populate("connections", "name email")
         .populate("connectionRequests", "name email");
+      me.notifications = me.notifications.map(n => ({ ...n.toObject(), read: true }));
+      await me.save();
       return res.status(200).json({ message: "Fetched successfully", data: { connections: me.connections, requests: me.connectionRequests, notifications: me.notifications } });
     }
 
@@ -81,3 +83,4 @@ module.exports = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong", error: err.message });
   }
 };
+
