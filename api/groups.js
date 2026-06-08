@@ -56,6 +56,16 @@ module.exports = async (req, res) => {
       return res.status(201).json({ message: "Group created successfully", data: group });
     }
 
+    if (req.method === "PUT" && id) {
+      const group = await Group.findById(id);
+      if (!group) return res.status(404).json({ message: "Group not found" });
+      if (group.createdBy.toString() !== user.id) return res.status(403).json({ message: "Only creator can edit." });
+      const { name, description } = req.body;
+      if (name) group.name = name;
+      if (description !== undefined) group.description = description;
+      await group.save();
+      return res.status(200).json({ message: "Group updated successfully", data: group });
+    }
     if (req.method === "PATCH" && id) {
       const group = await Group.findById(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
@@ -95,5 +105,6 @@ module.exports = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong", error: err.message });
   }
 };
+
 
 
