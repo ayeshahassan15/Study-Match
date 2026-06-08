@@ -31,6 +31,7 @@ function Home() {
     else if (form.name.trim().length < 3) errs.name = "Name must be at least 3 characters";
     else if (!/^[a-zA-Z\s]+$/.test(form.name)) errs.name = "Name can only contain letters and spaces";
     if (form.subjects.length === 0) errs.subjects = "Select at least one subject";
+    else if (form.subjects.length > 4) errs.subjects = "You can select up to 4 subjects only";
     if (form.days.length === 0) errs.days = "Select at least one day";
     if (!form.timeSlot) errs.timeSlot = "Please select a time slot";
     if (form.contact && !/^03[0-9]{9}$/.test(form.contact)) errs.contact = "Enter a valid Pakistani number e.g. 03001234567";
@@ -76,8 +77,8 @@ function Home() {
             <label>Subjects you study *</label>
             <div className="checkbox-group">
               {ALL_SUBJECTS.map(s => (
-                <label key={s}><input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} />{s}</label>
-              ))}
+                <label key={s} style={{ opacity: !form.subjects.includes(s) && form.subjects.length >= 4 ? 0.4 : 1 }}><input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} disabled={!form.subjects.includes(s) && form.subjects.length >= 4} />{s}</label>
+              ))}}
             </div>
             {errors.subjects && <p className="error" style={{ marginTop: "0.3rem" }}>{errors.subjects}</p>}
           </div>
@@ -107,6 +108,8 @@ function Home() {
 }
 
 export default Home;
+
+
 
 
 

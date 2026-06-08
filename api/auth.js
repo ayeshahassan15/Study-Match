@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
       const existing = await User.findOne({ email });
       if (existing) return res.status(400).json({ message: "Email already registered." });
       const hashed = await bcrypt.hash(password, 10);
-      const user = new User({ name, email, password: hashed, badges: ["?? New Member"] });
+      const user = new User({ name, email, password: hashed, badges: ["★ New Member"] });
       await user.save();
       const token = jwt.sign({ id: user._id, name: user.name }, process.env.JWT_SECRET, { expiresIn: "7d" });
       return res.status(201).json({ message: "Record created successfully", token, name: user.name, badges: user.badges });

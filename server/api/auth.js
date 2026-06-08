@@ -5,7 +5,7 @@ const User = require("../models/User");
 
 let isConnected = false;
 
-async function connectDB() {
+async function connectDB()  {
   if (isConnected) return;
   await mongoose.connect(process.env.MONGO_URI);
   isConnected = true;

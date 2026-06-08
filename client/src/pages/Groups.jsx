@@ -63,6 +63,19 @@ function Groups() {
     }
   };
 
+  const handleEdit = async (group) => {
+    const newName = window.prompt("Edit group name:", group.name);
+    if (!newName || !newName.trim()) return;
+    const newDesc = window.prompt("Edit description:", group.description || "");
+    try {
+      const res = await axios.put(`/api/groups?id=${group._id}`, { name: newName.trim(), description: newDesc || "" }, { headers: { Authorization: `Bearer ${getToken()}` } });
+      dispatch({ type: "UPDATE", payload: res.data.data });
+      setMsg({ type: "success", text: "Group updated!" });
+    } catch {
+      setMsg({ type: "error", text: "Failed to update group." });
+    }
+  };
+
   const handleLeaveOrDelete = async (id) => {
     if (!window.confirm("Are you sure?")) return;
     try {
@@ -136,6 +149,7 @@ function Groups() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", marginLeft: "1rem" }}>
                 {!isMember && <button onClick={() => handleJoin(group._id)} style={{ fontSize: "0.78rem", padding: "0.3rem 0.7rem" }}>Join</button>}
+                {isCreator && <button onClick={() => handleEdit(group)} style={{ fontSize: "0.78rem", padding: "0.3rem 0.7rem", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>Edit</button>}
                 {isMember && (
                   <button onClick={() => handleLeaveOrDelete(group._id)} className="delete-btn" style={{ fontSize: "0.78rem", padding: "0.3rem 0.7rem" }}>
                     {isCreator ? "Delete" : "Leave"}
@@ -151,3 +165,9 @@ function Groups() {
 }
 
 export default Groups;
+
+
+
+
+
+

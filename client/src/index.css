@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500;600;700&display=swap');
 
 * {
   margin: 0;
@@ -114,6 +114,8 @@ label {
 }
 
 input[type="text"],
+input[type="password"],
+input[type="email"],
 select {
   width: 100%;
   padding: 0.7rem 1rem;
@@ -127,12 +129,23 @@ select {
   margin-bottom: 0;
 }
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder {
   color: var(--text-muted);
 }
 
 input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
 select:focus {
+
+/* Hide browser native password toggle */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+}
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-glow);
@@ -330,3 +343,6 @@ body.light {
 .page-transition {
   animation: fadeUp 0.3s ease both;
 }
+
+
+
