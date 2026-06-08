@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+﻿const mongoose = require("mongoose");
 const Student = require("../server/models/Student");
 const jwt = require("jsonwebtoken");
 
@@ -61,6 +61,9 @@ module.exports = async (req, res) => {
     // POST
     if (method === "POST") {
       const user = getUserFromToken(req);
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
+      const existing = await Student.findOne({ userId: user.id });
+      if (existing) return res.status(400).json({ message: "You already have a student profile. You can only register one." });
       const { name, subjects, days, timeSlot, contact } = req.body;
       if (!name || !subjects || !days || !timeSlot) {
         return res.status(400).json({ message: "Invalid input data. Name, subjects, days and timeSlot are required." });
@@ -119,3 +122,4 @@ module.exports = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong. Please try again later.", error: err.message });
   }
 };
+

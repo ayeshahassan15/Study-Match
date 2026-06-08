@@ -61,7 +61,7 @@ useEffect(() => {
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
         {user ? (
           <>
-            <NavLink to="/" end onClick={() => setMenuOpen(false)}>Register</NavLink>
+            <NavLink to="/profile" onClick={() => setMenuOpen(false)}>Register</NavLink>
             <NavLink to="/students" onClick={() => setMenuOpen(false)}>Students</NavLink>
             <NavLink to="/match" onClick={() => setMenuOpen(false)}>Find Match</NavLink>
             <NavLink to="/groups" onClick={() => setMenuOpen(false)}>Groups</NavLink>
@@ -88,6 +88,7 @@ useEffect(() => {
 }
 
 export default Navbar;
+
 
 
 

@@ -42,6 +42,7 @@ function AppRoutes() {
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
           <Route path="/edit-account" element={<ProtectedRoute><EditAccount /></ProtectedRoute>} />
+          <Route path="/match" element={<ProtectedRoute><Match /></ProtectedRoute>} />
           <Route path="/groups" element={<ProtectedRoute><Groups /></ProtectedRoute>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
@@ -63,4 +64,5 @@ function App() {
 }
 
 export default App;
+
 

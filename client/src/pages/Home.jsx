@@ -5,7 +5,7 @@ import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { useAuth } from "../context/AuthContext";
 
-const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
+const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies","Other"];
 const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
 
@@ -14,6 +14,7 @@ function Home() {
   const { showToast } = useToast();
   const { user } = useAuth();
   const [form, setForm] = useState({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
+  const [otherSubject, setOtherSubject] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -32,6 +33,7 @@ function Home() {
     else if (!/^[a-zA-Z\s]+$/.test(form.name)) errs.name = "Name can only contain letters and spaces";
     if (form.subjects.length === 0) errs.subjects = "Select at least one subject";
     else if (form.subjects.length > 4) errs.subjects = "You can select up to 4 subjects only";
+    if (form.subjects.includes("Other") && !otherSubject.trim()) errs.subjects = "Please type your subject name";
     if (form.days.length === 0) errs.days = "Select at least one day";
     if (!form.timeSlot) errs.timeSlot = "Please select a time slot";
     if (form.contact && !/^03[0-9]{9}$/.test(form.contact)) errs.contact = "Enter a valid Pakistani number e.g. 03001234567";
@@ -45,12 +47,16 @@ function Home() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.post("/api/students", { ...form, name: form.name.trim() }, { headers: { Authorization: `Bearer ${token}` } });
+      const finalSubjects = form.subjects.includes("Other") && otherSubject.trim()
+        ? [...form.subjects.filter(s => s !== "Other"), otherSubject.trim()]
+        : form.subjects;
+      await axios.post("/api/students", { ...form, subjects: finalSubjects, name: form.name.trim() }, { headers: { Authorization: `Bearer ${token}` } });
       showToast("You have been registered successfully!");
       setForm({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
+      setOtherSubject("");
       setErrors({});
     } catch (err) {
-      showToast("Something went wrong. Please try again.", "error");
+      showToast(err.response?.data?.message || "Something went wrong. Please try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -74,12 +80,18 @@ function Home() {
             {errors.contact && <p className="error" style={{ marginTop: "0.3rem" }}>{errors.contact}</p>}
           </div>
           <div className="form-group">
-            <label>Subjects you study *</label>
+            <label>Subjects you study * (max 4)</label>
             <div className="checkbox-group">
               {ALL_SUBJECTS.map(s => (
-                <label key={s} style={{ opacity: !form.subjects.includes(s) && form.subjects.length >= 4 ? 0.4 : 1 }}><input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} disabled={!form.subjects.includes(s) && form.subjects.length >= 4} />{s}</label>
-              ))}}
+                <label key={s} style={{ opacity: !form.subjects.includes(s) && form.subjects.length >= 4 ? 0.4 : 1 }}>
+                  <input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} disabled={!form.subjects.includes(s) && form.subjects.length >= 4} />
+                  {s}
+                </label>
+              ))}
             </div>
+            {form.subjects.includes("Other") && (
+              <input type="text" placeholder="Type your subject name..." value={otherSubject} onChange={e => { setOtherSubject(e.target.value); setErrors({ ...errors, subjects: null }); }} style={{ marginTop: "0.5rem" }} />
+            )}
             {errors.subjects && <p className="error" style={{ marginTop: "0.3rem" }}>{errors.subjects}</p>}
           </div>
           <div className="form-group">
@@ -108,11 +120,3 @@ function Home() {
 }
 
 export default Home;
-
-
-
-
-
-
-
-
