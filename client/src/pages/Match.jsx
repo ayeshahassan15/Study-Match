@@ -6,11 +6,11 @@ import usePageTitle from "../hooks/usePageTitle";
 
 const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 const TIME_SLOTS = ["Morning","Afternoon","Evening"];
-const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
+const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies","Other"];
 
 function Match() {
   usePageTitle("Find Match");
-  const [filters, setFilters] = useState({ subjects: [], day: "", timeSlot: "" });
+ const [filters, setFilters] = useState({ subjects: [], day: "", timeSlot: "", otherSubject: "" });
   const [results, setResults] = useState([]);
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -66,6 +66,17 @@ function Match() {
       const myId = getMyId();
       const res = await axios.get("/api/students");
       let data = res.data.data;
+
+if (filters.subjects.includes("Other") && filters.otherSubject.trim()) {
+  const customSubject = filters.otherSubject.trim().toLowerCase();
+  data = data.filter(s =>
+    s.subjects.some(sub =>
+      sub.toLowerCase().includes(customSubject)
+    )
+  );
+}
+
+
       data = data.filter(s => !s.userId || s.userId !== myId);
       if (filters.subjects.length > 0) data = data.filter(s => s.subjects.some(sub => filters.subjects.includes(sub)));
       if (filters.day) data = data.filter(s => s.days.includes(filters.day));
@@ -105,6 +116,19 @@ function Match() {
             ))}
           </div>
         </div>
+
+
+
+        {filters.subjects.includes("Other") && (
+            <input
+              type="text"
+              placeholder="Type your subject..."
+              value={filters.otherSubject}
+              onChange={e => setFilters({ ...filters, otherSubject: e.target.value })}
+              style={{ marginTop: "0.5rem" }}
+            />
+          )}
+
         <div className="form-group">
           <label>Day</label>
           <select value={filters.day} onChange={e => { setFilters({ ...filters, day: e.target.value }); setError(null); }}>
@@ -171,3 +195,4 @@ function Match() {
 }
 
 export default Match;
+
