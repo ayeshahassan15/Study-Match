@@ -87,8 +87,8 @@ function Signup() {
           <div className="form-group">
             <label>Password</label>
             <div style={{ position: "relative" }}>
-              <input type={showPassword ? "text" : "password"} name="password" placeholder="min 8 characters" value={form.password} onChange={handleChange} style={{ paddingRight: "3rem" }} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--text-muted)", fontSize: "0.8rem", padding: 0, cursor: "pointer" }}>
+              <input type={showPassword ? "text" : "password"} name="password" placeholder="min 8 characters" value={form.password} onChange={handleChange} style={{ paddingRight: "4.5rem" }} />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "4px", cursor: "pointer", whiteSpace: "nowrap" }}>
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
@@ -98,8 +98,8 @@ function Signup() {
           <div className="form-group">
             <label>Confirm Password</label>
             <div style={{ position: "relative" }}>
-              <input type={showConfirm ? "text" : "password"} name="confirmPassword" placeholder="repeat your password" value={form.confirmPassword} onChange={handleChange} style={{ paddingRight: "3rem" }} />
-              <button type="button" onClick={() => setShowConfirm(!showConfirm)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--text-muted)", fontSize: "0.8rem", padding: 0, cursor: "pointer" }}>
+              <input type={showConfirm ? "text" : "password"} name="confirmPassword" placeholder="repeat your password" value={form.confirmPassword} onChange={handleChange} style={{ paddingRight: "4.5rem" }} />
+              <button type="button" onClick={() => setShowConfirm(!showConfirm)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "4px", cursor: "pointer", whiteSpace: "nowrap" }}>
                 {showConfirm ? "Hide" : "Show"}
               </button>
             </div>
@@ -118,6 +118,13 @@ function Signup() {
   );
 }
 export default Signup;
+
+
+
+
+
+
+
 
 
 

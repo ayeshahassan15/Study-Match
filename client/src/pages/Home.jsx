@@ -10,6 +10,7 @@ const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
 
 function Home() {
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   usePageTitle("Register");
   const { showToast } = useToast();
   const { user } = useAuth();
@@ -120,3 +121,4 @@ function Home() {
 }
 
 export default Home;
+
