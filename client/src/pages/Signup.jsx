@@ -86,8 +86,8 @@ function Signup() {
           </div>
           <div className="form-group">
             <label>Password</label>
-            <div style={{ position: "relative" }}>
-              <input type={showPassword ? "text" : "password"} name="password" placeholder="min 8 characters" value={form.password} onChange={handleChange} style={{ paddingRight: "4.5rem" }} />
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <input type={showPassword ? "text" : "password"} name="password" placeholder="min 8 characters" value={form.password} onChange={handleChange} style={{ flex: 1, paddingRight: "4.5rem" }} />
               <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "4px", cursor: "pointer", whiteSpace: "nowrap" }}>
                 {showPassword ? "Hide" : "Show"}
               </button>
@@ -97,8 +97,8 @@ function Signup() {
           </div>
           <div className="form-group">
             <label>Confirm Password</label>
-            <div style={{ position: "relative" }}>
-              <input type={showConfirm ? "text" : "password"} name="confirmPassword" placeholder="repeat your password" value={form.confirmPassword} onChange={handleChange} style={{ paddingRight: "4.5rem" }} />
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <input type={showConfirm ? "text" : "password"} name="confirmPassword" placeholder="repeat your password" value={form.confirmPassword} onChange={handleChange} style={{ flex: 1, paddingRight: "4.5rem" }} />
               <button type="button" onClick={() => setShowConfirm(!showConfirm)} style={{ position: "absolute", right: "0.7rem", top: "50%", transform: "translateY(-50%)", background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text-muted)", fontSize: "0.75rem", padding: "0.2rem 0.5rem", borderRadius: "4px", cursor: "pointer", whiteSpace: "nowrap" }}>
                 {showConfirm ? "Hide" : "Show"}
               </button>
@@ -118,6 +118,8 @@ function Signup() {
   );
 }
 export default Signup;
+
+
 
 
 
