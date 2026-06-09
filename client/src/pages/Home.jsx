@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +27,7 @@ function Home() {
     axios.get("/api/students")
       .then(res => {
         const mine = res.data.data.find(s => s.userId === myId);
-        if (mine) setHasProfile(true);
+        if (mine) { setHasProfile(true); showToast("You already have a study profile. Please edit your existing one.", "error"); }
       })
       .catch(() => {})
       .finally(() => setChecking(false));
@@ -85,12 +85,7 @@ function Home() {
 
   return (
     <div>
-      {hasProfile && (
-        <div style={{ background: "rgba(124,109,255,0.1)", border: "1px solid rgba(124,109,255,0.3)", borderRadius: "10px", padding: "0.8rem 1rem", marginBottom: "1.2rem", fontSize: "0.9rem", color: "var(--accent)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span>You already have a study profile.</span>
-          <a href="/profile" style={{ color: "var(--accent)", fontWeight: 600, textDecoration: "underline" }}>View it here</a>
-        </div>
-      )}
+      
       <h1>Register as a Study Buddy</h1>
       <p style={{ marginBottom: "1.5rem" }}>Add your details and find students who study the same subjects at the same time.</p>
       <div className="card">
@@ -146,3 +141,7 @@ function Home() {
 }
 
 export default Home;
+
+
+
+
