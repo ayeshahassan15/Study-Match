@@ -1,25 +1,42 @@
-﻿import { useState } from "react";
-import PageWrapper from "../components/PageWrapper";
-import usePageTitle from "../hooks/usePageTitle";
+﻿import { useState, useEffect } from "react";
 import axios from "axios";
 import { useToast } from "../context/ToastContext";
-import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+import usePageTitle from "../hooks/usePageTitle";
 
-const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies","Other"];
-const ALL_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const TIME_SLOTS = ["Morning", "Afternoon", "Evening"];
+const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
+const ALL_DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+const TIME_SLOTS = ["Morning","Afternoon","Evening"];
+const MAX_SUBJECTS = 6;
 
 function Home() {
-  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
   usePageTitle("Register");
   const { showToast } = useToast();
-  const { user } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
-  const [otherSubject, setOtherSubject] = useState("");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [existingProfile, setExistingProfile] = useState(null);
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) { setChecking(false); return; }
+    const myId = JSON.parse(atob(token.split(".")[1])).id;
+    axios.get("/api/students")
+      .then(res => {
+        const myProfile = res.data.data.find(s => s.userId === myId);
+        if (myProfile) setExistingProfile(myProfile);
+        setChecking(false);
+      })
+      .catch(() => setChecking(false));
+  }, []);
 
   const toggleItem = (field, value) => {
+    if (field === "subjects" && !form.subjects.includes(value) && form.subjects.length >= MAX_SUBJECTS) {
+      setErrors(prev => ({ ...prev, subjects: `You can select up to ${MAX_SUBJECTS} subjects only.` }));
+      return;
+    }
     setForm(prev => ({
       ...prev,
       [field]: prev[field].includes(value) ? prev[field].filter(v => v !== value) : [...prev[field], value]
@@ -33,8 +50,6 @@ function Home() {
     else if (form.name.trim().length < 3) errs.name = "Name must be at least 3 characters";
     else if (!/^[a-zA-Z\s]+$/.test(form.name)) errs.name = "Name can only contain letters and spaces";
     if (form.subjects.length === 0) errs.subjects = "Select at least one subject";
-    else if (form.subjects.length > 4) errs.subjects = "You can select up to 4 subjects only";
-    if (form.subjects.includes("Other") && !otherSubject.trim()) errs.subjects = "Please type your subject name";
     if (form.days.length === 0) errs.days = "Select at least one day";
     if (!form.timeSlot) errs.timeSlot = "Please select a time slot";
     if (form.contact && !/^03[0-9]{9}$/.test(form.contact)) errs.contact = "Enter a valid Pakistani number e.g. 03001234567";
@@ -48,14 +63,11 @@ function Home() {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const finalSubjects = form.subjects.includes("Other") && otherSubject.trim()
-        ? [...form.subjects.filter(s => s !== "Other"), otherSubject.trim()]
-        : form.subjects;
-      await axios.post("/api/students", { ...form, subjects: finalSubjects, name: form.name.trim() }, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post("/api/students", { ...form, name: form.name.trim() }, { headers: { Authorization: `Bearer ${token}` } });
       showToast("You have been registered successfully!");
       setForm({ name: "", subjects: [], days: [], timeSlot: "", contact: "" });
-      setOtherSubject("");
       setErrors({});
+      navigate("/students");
     } catch (err) {
       showToast(err.response?.data?.message || "Something went wrong. Please try again.", "error");
     } finally {
@@ -63,8 +75,29 @@ function Home() {
     }
   };
 
+  if (checking) return <p>Loading...</p>;
+
+  if (existingProfile) {
+    return (
+      <div>
+        <h1>Register as a Study Buddy</h1>
+        <p style={{ marginBottom: "1.5rem" }}>You already have a registered profile.</p>
+        <div className="card" style={{ textAlign: "center", padding: "2rem" }}>
+          <p style={{ fontSize: "3rem", marginBottom: "1rem" }}>✓</p>
+          <h2 style={{ marginBottom: "0.5rem" }}>{existingProfile.name}</h2>
+          <div style={{ marginBottom: "1rem" }}>
+            {existingProfile.subjects.map(s => <span key={s} className="tag">{s}</span>)}
+          </div>
+          <div style={{ display: "flex", gap: "1rem", justifyContent: "center", marginTop: "1rem" }}>
+            <button onClick={() => navigate(`/edit/${existingProfile._id}`)}>Edit My Profile</button>
+            <button onClick={() => navigate("/students")} style={{ background: "var(--surface2)", border: "1px solid var(--border)", color: "var(--text)" }}>View All Students</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <PageWrapper>
     <div>
       <h1>Register as a Study Buddy</h1>
       <p style={{ marginBottom: "1.5rem" }}>Add your details and find students who study the same subjects at the same time.</p>
@@ -81,19 +114,17 @@ function Home() {
             {errors.contact && <p className="error" style={{ marginTop: "0.3rem" }}>{errors.contact}</p>}
           </div>
           <div className="form-group">
-            <label>Subjects you study * (max 4)</label>
+            <label>Subjects you study * (max {MAX_SUBJECTS})</label>
             <div className="checkbox-group">
               {ALL_SUBJECTS.map(s => (
-                <label key={s} style={{ opacity: !form.subjects.includes(s) && form.subjects.length >= 4 ? 0.4 : 1 }}>
-                  <input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} disabled={!form.subjects.includes(s) && form.subjects.length >= 4} />
+                <label key={s} style={{ opacity: form.subjects.length >= MAX_SUBJECTS && !form.subjects.includes(s) ? 0.5 : 1 }}>
+                  <input type="checkbox" checked={form.subjects.includes(s)} onChange={() => toggleItem("subjects", s)} disabled={form.subjects.length >= MAX_SUBJECTS && !form.subjects.includes(s)} />
                   {s}
                 </label>
               ))}
             </div>
-            {form.subjects.includes("Other") && (
-              <input type="text" placeholder="Type your subject name..." value={otherSubject} onChange={e => { setOtherSubject(e.target.value); setErrors({ ...errors, subjects: null }); }} style={{ marginTop: "0.5rem" }} />
-            )}
             {errors.subjects && <p className="error" style={{ marginTop: "0.3rem" }}>{errors.subjects}</p>}
+            <p style={{ fontSize: "0.8rem", color: "var(--text-muted)", marginTop: "0.3rem" }}>{form.subjects.length}/{MAX_SUBJECTS} selected</p>
           </div>
           <div className="form-group">
             <label>Days you are free *</label>
@@ -116,9 +147,7 @@ function Home() {
         </form>
       </div>
     </div>
-    </PageWrapper>
   );
 }
 
 export default Home;
-
