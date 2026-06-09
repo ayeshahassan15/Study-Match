@@ -52,10 +52,10 @@ useEffect(() => {
       <NavLink to="/" className="brand">Study Match</NavLink>
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
         <button onClick={toggleTheme} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "0.3rem 0.6rem", fontSize: "1rem", borderRadius: "8px" }}>
-  {theme === "dark" ? "??" : "??"}
+  {theme === "dark" ? "☀️" : "🌙"}
 </button>
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
-  {menuOpen ? "?" : "?"}
+  {menuOpen ? "✕" : "☰"}
 </button>
       </div>
       <div className={`nav-links ${menuOpen ? "open" : ""}`}>
@@ -88,6 +88,8 @@ useEffect(() => {
 }
 
 export default Navbar;
+
+
 
 
 

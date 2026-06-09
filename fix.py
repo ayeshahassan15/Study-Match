@@ -1,0 +1,5 @@
+﻿content = open('client/src/components/Navbar.jsx', encoding='utf-8').read()
+content = content.replace('{theme === "dark" ? "??" : "??"}', '{theme === "dark" ? "\u2600\ufe0f" : "\U0001f319"}')
+content = content.replace('{menuOpen ? "?" : "?"}', '{menuOpen ? "\u2715" : "\u2630"}')
+open('client/src/components/Navbar.jsx', 'w', encoding='utf-8').write(content)
+print('Done')
