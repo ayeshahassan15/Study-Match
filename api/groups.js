@@ -37,7 +37,6 @@ module.exports = async (req, res) => {
 
   await connectDB();
   const user = getUserFromToken(req);
-  if (!user) return res.status(401).json({ message: "Unauthorized" });
 
   const { query } = req;
   const id = query.id;
@@ -49,6 +48,7 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === "POST") {
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
       const { name, subject, description } = req.body;
       if (!name || !subject) return res.status(400).json({ message: "Name and subject are required." });
       const group = new Group({ name, subject, description: description || "", createdBy: user.id, members: [user.id], memberNames: [user.name] });
@@ -56,17 +56,8 @@ module.exports = async (req, res) => {
       return res.status(201).json({ message: "Group created successfully", data: group });
     }
 
-    if (req.method === "PUT" && id) {
-      const group = await Group.findById(id);
-      if (!group) return res.status(404).json({ message: "Group not found" });
-      if (group.createdBy.toString() !== user.id) return res.status(403).json({ message: "Only creator can edit." });
-      const { name, description } = req.body;
-      if (name) group.name = name;
-      if (description !== undefined) group.description = description;
-      await group.save();
-      return res.status(200).json({ message: "Group updated successfully", data: group });
-    }
     if (req.method === "PATCH" && id) {
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
       const group = await Group.findById(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
       if (group.members.map(m => m.toString()).includes(user.id)) return res.status(400).json({ message: "Already a member" });
@@ -77,6 +68,7 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === "PUT" && id) {
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
       const group = await Group.findById(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
       if (group.createdBy.toString() !== user.id) return res.status(403).json({ message: "Only the creator can edit this group." });
@@ -88,6 +80,7 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === "DELETE" && id) {
+      if (!user) return res.status(401).json({ message: "Unauthorized" });
       const group = await Group.findById(id);
       if (!group) return res.status(404).json({ message: "Group not found" });
       if (group.createdBy.toString() === user.id) {
@@ -105,6 +98,12 @@ module.exports = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong", error: err.message });
   }
 };
+
+
+
+
+
+
 
 
 

@@ -49,11 +49,10 @@ function EditStudent() {
   };
 
   const toggleDay = (day) => {
-    const ALL_SUBJECTS = ["Mathematics","Physics","Programming","Data Science","AI/ML","Database","Web Development","DSA","English","Calculus","Theory of Automata","Operating Systems","Software Engineering","AI Lab","Computer Networks","Digital Logic Design","Linear Algebra","Statistics","Islamiat","Pakistan Studies"];
-const DAYS = state.form.days.includes(day)
+    const updated = state.form.days.includes(day)
       ? state.form.days.filter(d => d !== day)
       : [...state.form.days, day];
-    dispatch({ type: "SET_FIELD", field: "days", value: days });
+    dispatch({ type: "SET_FIELD", field: "days", value: updated });
   };
 
   const handleSubmit = async (e) => {
@@ -63,7 +62,8 @@ const DAYS = state.form.days.includes(day)
     if (!window.confirm("Are you sure you want to save these changes?")) return;
     dispatch({ type: "SAVING" });
     try {
-      await axios.put(`/api/students?id=${id}`, state.form);
+      const token = localStorage.getItem("token");
+      await axios.put(`/api/students?id=${id}`, state.form, { headers: { Authorization: `Bearer ${token}` } });
       dispatch({ type: "SAVED" });
       showToast("Student updated successfully!");
       setTimeout(() => navigate("/students"), 800);
@@ -129,6 +129,8 @@ const DAYS = state.form.days.includes(day)
 }
 
 export default EditStudent;
+
+
 
 
 
