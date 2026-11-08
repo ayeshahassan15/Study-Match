@@ -2,13 +2,14 @@
 
 A full-stack web application that helps university students find study buddies based on shared subjects, available days, and time slots.
 
-## Live Demo
-https://study-match-r7c2.vercel.app
+**Live demo:** https://study-match-r7c2.vercel.app
 
 ## Project Description
+
 Study Match solves the problem of students struggling to find compatible study partners. Students can register their profile with their subjects, availability, and preferred time slots. They can then search and match with other students, send connection requests, join study groups, and rate their study buddies.
 
 ## Features
+
 - User authentication (signup, login, logout) with JWT
 - Register a student profile with subjects, days, and time slot
 - View all registered students with search, sort, and pagination
@@ -31,20 +32,23 @@ Study Match solves the problem of students struggling to find compatible study p
 - Landing page for non-logged-in users
 
 ## Technologies Used
+
 - **Frontend:** React JS, React Router, Axios, Vite, Context API
-- **Backend:** Node.js, Express JS (Serverless Functions via Vercel)
+- **Backend:** Node.js, Express JS (serverless functions via Vercel)
 - **Database:** MongoDB with Mongoose
 - **Authentication:** JWT (JSON Web Tokens)
 - **Deployment:** Vercel
 
 ## Project Structure
+
+```
 study-match/
 ├── client/                  # React frontend
-│   ├── src/
-│   │   ├── components/      # Reusable components
-│   │   ├── context/         # AuthContext, ToastContext, ThemeContext
-│   │   ├── hooks/           # Custom hooks (useForm, usePageTitle, useKeyboard)
-│   │   └── pages/           # All page components
+│   └── src/
+│       ├── components/      # Reusable components
+│       ├── context/         # AuthContext, ToastContext, ThemeContext
+│       ├── hooks/           # Custom hooks (useForm, usePageTitle, useKeyboard)
+│       └── pages/           # All page components
 ├── server/                  # Backend logic
 │   ├── api/                 # Express route handlers
 │   ├── controller/          # Controller functions
@@ -52,64 +56,70 @@ study-match/
 │   └── routes/              # Route definitions
 ├── api/                     # Vercel serverless functions
 └── vercel.json              # Vercel configuration
-
+```
 
 ## Setup Instructions
+
 ### Prerequisites
+
 - Node.js installed
-- MongoDB Atlas account
+- MongoDB Atlas account (free)
 - Git installed
 
-### Frontend Setup
+### 1. Clone the repository
+
 ```bash
-cd client
-npm install
-npm run dev
+git clone https://github.com/ayeshahassan15/Study-Match.git
+cd Study-Match
 ```
 
-### Backend Setup
-```bash
-cd server
-npm install
-npm run dev
-```
+### 2. Set up the database
 
-### Database Setup
-1. Create a free MongoDB Atlas account at https://mongodb.com
+1. Create a free MongoDB Atlas account at https://www.mongodb.com
 2. Create a new cluster
-3. Get your connection string
-4. Add it to your .env file
+3. In **Network Access**, allow access from your IP (or `0.0.0.0/0` for deployment)
+4. Copy your connection string
 
-### Environment Variables
+### 3. Add environment variables
+
 Create a `.env` file inside the `server/` folder:
 
+```
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/studymatch?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_secret_key
 PORT=5000
-
-
-### Run Locally
-1. Clone the repository
-```bash
-git clone <your-repo-url>
-cd study-match
 ```
-2. Setup frontend
+
+### 4. Run the frontend
+
 ```bash
 cd client
 npm install
 npm run dev
 ```
-3. Setup backend
+
+### 5. Run the backend
+
+Open a second terminal:
+
 ```bash
 cd server
 npm install
 npm run dev
 ```
-4. Open http://localhost:5173 in your browser
+
+### 6. Open the app
+
+Go to http://localhost:5173 in your browser.
+
+## Deployment
+
+The app is deployed on Vercel. In the Vercel project, go to **Settings, Environment Variables** and add `MONGO_URI` and `JWT_SECRET`, then redeploy.
 
 ## API Endpoints
+
 ### Auth
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | /api/auth/register | Register a new user |
@@ -118,6 +128,7 @@ npm run dev
 | PATCH | /api/auth/update | Update account |
 
 ### Students
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/students | Get all students |
@@ -128,6 +139,7 @@ npm run dev
 | DELETE | /api/students?id=:id | Delete student |
 
 ### Groups
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/groups | Get all groups |
@@ -137,6 +149,7 @@ npm run dev
 | DELETE | /api/groups?id=:id | Leave/delete group |
 
 ### Connections
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/connections | Get connections and notifications |
@@ -145,6 +158,7 @@ npm run dev
 | PATCH | /api/connections/reject | Reject connection |
 
 ### Ratings
+
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | /api/ratings?userId=:id | Get user rating |
